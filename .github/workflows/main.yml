@@ -1,5 +1,4 @@
 name: CI/CD - Proxy
-description: Builds docker containers for the proxy on every PUSH/PR to production
 
 on:
   push:
