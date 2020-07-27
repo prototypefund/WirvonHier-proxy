@@ -9,9 +9,8 @@ on:
       - production
 
 jobs:
-  cd:
+  deliver:
     runs-on: ubuntu-latest
-    needs: ci
     steps:
       - uses: actions/checkout@v2
 
