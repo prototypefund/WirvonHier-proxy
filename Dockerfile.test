@@ -56,7 +56,8 @@ COPY --from=builder-2 /etc/letsencrypt/ssl-dhparams.pem /etc/nginx/ssl-dhparams.
 
 EXPOSE 80 443
 
-COPY wirvonhier.prod.conf /etc/nginx/conf.d/default.conf
+# NGINX CONFIG IS THE ONLY DIFFERENCE TO PROD
+COPY wirvonhier.test.conf /etc/nginx/conf.d/default.conf
 COPY nginx.conf /etc/nginx/nginx.conf
 
 CMD ["nginx", "-g", "daemon off;"]
