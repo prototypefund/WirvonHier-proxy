@@ -49,7 +49,7 @@ FROM nginx:${version}
 
 COPY --from=builder /usr/lib/nginx/modules/* /usr/lib/nginx/modules/
 COPY --from=builder /etc/ssl/certs/dhparam.pem /etc/nginx/ssl-dhparam.pem
-COPY open-ssl-nginx.conf /etc/nginx/open-ssl-nginx.conf
+COPY options-ssl-nginx.conf /etc/nginx/options-ssl-nginx.conf
 
 EXPOSE 80 443
 
