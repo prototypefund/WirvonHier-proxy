@@ -1,0 +1,32 @@
+name: Release - Proxy - Build & Push to Dockerhub
+
+on:
+  push:
+    branches:
+      - release-*
+  pull_request:
+    branches:
+      - release-*
+
+jobs:
+  deliver:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2
+
+      - name: Docker Login
+        run: docker login -u ${{ secrets.DOCKER_USER }} -p ${{ secrets.DOCKER_PASSWORD }}
+
+      - name: Build
+        run: docker build -t proxy .
+      
+      - name: Extract branch name
+        shell: bash
+        run: echo "##[set-output name=branch;]$(echo ${GITHUB_REF#refs/heads/})"
+        id: extract_branch
+
+      - name: Tag + Push
+        run: |
+          tag="${{ steps.extract_branch.outputs.branch }}"
+          docker tag proxy "${{ secrets.DOCKER_ORGANIZATION }}/proxy:$tag"
+          docker push "${{ secrets.DOCKER_ORGANIZATION }}/proxy:$tag"
