@@ -41,18 +41,15 @@ RUN printf "\n\e[96m>\e[0m\033[1m Build brotli \e[0m\n\n" \
   && dpkg -i ${pkg} \
   && echo "---"
 
-FROM nginx:${verion} as builder-2
-
-ENV deps "certbot"
-
-RUN apt-get update \
-  && apt-get install -y --no-install-recommends $deps
+RUN printf "\n\e[96m>\e[0m\033[1m Generate DH Param \e[0m\n\n" \
+  && cd /etc/ssl/certs \
+  && openssl dhparam -dsaparam -out dhparam.pem 2048
 
 FROM nginx:${version}
 
 COPY --from=builder /usr/lib/nginx/modules/* /usr/lib/nginx/modules/
-COPY --from=builder-2 /etc/letsencrypt/open-ssl-nginx.conf /etc/nginx/open-ssl-nginx.conf
-COPY --from=builder-2 /etc/letsencrypt/ssl-dhparams.pem /etc/nginx/ssl-dhparams.pem
+COPY --from=builder /etc/ssl/certs/dhparam.pem /etc/nginx/ssl-dhparam.pem
+COPY open-ssl-nginx.conf /etc/nginx/open-ssl-nginx.conf
 
 EXPOSE 80 443
 
